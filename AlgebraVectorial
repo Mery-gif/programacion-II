@@ -1,0 +1,75 @@
+public class AlgebraVectorial {
+    private double ax, ay, bx, by;
+    // Constructor vacío
+    public AlgebraVectorial() {
+        this.ax = 0;
+        this.ay = 0;
+        this.bx = 0;
+        this.by = 0;
+    }
+    // Constructor con parámetros
+    public AlgebraVectorial(double ax, double ay, double bx, double by) {
+        this.ax = ax;
+        this.ay = ay;
+        this.bx = bx;
+        this.by = by;
+    }
+    // Magnitud de vector
+    private double magnitud(double x, double y) {
+        return Math.sqrt(x * x + y * y);
+    }
+    // Producto punto
+    private double productoPunto() {
+        return ax * bx + ay * by;
+    }
+    // Producto cruz (en 2D → escalar)
+    private double productoCruz() {
+        return ax * by - ay * bx;
+    }
+    // 🔹 PERPENDICULAR (a·b = 0)
+    public boolean perpendicular() {
+        return productoPunto() == 0;
+    }
+    // 🔹 PERPENDICULAR (sobrecarga con diferentes criterios)
+    public boolean perpendicular(int tipo) {
+
+        double suma = Math.pow(magnitud(ax + bx, ay + by), 2);
+        double resta = Math.pow(magnitud(ax - bx, ay - by), 2);
+        double magA = Math.pow(magnitud(ax, ay), 2);
+        double magB = Math.pow(magnitud(bx, by), 2);
+
+        switch (tipo) {
+            case 1: return suma == resta; // |a+b| = |a-b|
+            case 2: return resta == resta; // trivial (simetría)
+            case 3: return productoPunto() == 0; // a·b=0
+            case 4: return suma == (magA + magB); // Pitágoras
+            default: return false;
+        }
+    }
+    // 🔹 PARALELA (producto cruz = 0)
+    public boolean paralela() {
+        return productoCruz() == 0;
+    }
+    // 🔹 PARALELA (sobrecarga)
+    public boolean paralela(int tipo) {
+        if (tipo == 1) {
+            // a = r*b  → comparar proporciones
+            if (bx != 0 && by != 0) {
+                return (ax / bx) == (ay / by);
+            }
+        }
+        if (tipo == 2) {
+            return productoCruz() == 0;
+        }
+        return false;
+    }
+    // 🔹 PROYECCIÓN de a sobre b
+    public double[] proyeccion() {
+        double escalar = productoPunto() / Math.pow(magnitud(bx, by), 2);
+        return new double[]{escalar * bx, escalar * by};
+    }
+    // 🔹 COMPONENTE de a en b
+    public double componente() {
+        return productoPunto() / magnitud(bx, by);
+    }
+}
